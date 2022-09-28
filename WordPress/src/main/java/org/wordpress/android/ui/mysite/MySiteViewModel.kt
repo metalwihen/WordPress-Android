@@ -461,7 +461,8 @@ class MySiteViewModel @Inject constructor(
                                 } else null,
                                 onShareClick = this::onBloggingPromptShareClick,
                                 onAnswerClick = this::onBloggingPromptAnswerClick,
-                                onSkipClick = this::onBloggingPromptSkipClicked
+                                onSkipClick = this::onBloggingPromptSkipClicked,
+                                onViewMorePrompts = this::onBloggingPromptViewMorePrompts
                         )
                 ),
                 QuickLinkRibbonBuilderParams(
@@ -1234,6 +1235,13 @@ class MySiteViewModel @Inject constructor(
             )
 
             _onSnackbarMessage.postValue(Event(snackbar))
+        }
+    }
+
+    private fun onBloggingPromptViewMorePrompts() {
+        selectedSiteRepository.getSelectedSite()?.let { site ->
+            val siteId = site.localId().value
+            // TODO: Open Prompts List Page
         }
     }
 
