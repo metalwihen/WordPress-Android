@@ -2,38 +2,51 @@
 
 name: CI
 
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "trunk" branch
-  push:
-    branches: [ "trunk" ]
   pull_request:
-    branches: [ "trunk" ]
 
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  checkstyle:
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      # Runs a single command using the runners shell
+      - name: Setup
+        run: |
+          cp gradle.properties-example gradle.properties
+
       - name: Run checkstyle
         run: |
-          echo Running checktyle
           ./gradlew checkstyle
+          pwd
 
-      # Runs a set of commands using the runners shell
+      - name: Archive results
+        uses: actions/upload-artifact@v3
+        with:
+          name: code-report
+          path: /libs/editor/build/reports/*
+
+  detekt:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
       - name: Run detekt
         run: |
-          echo Running detekt
+          cp gradle.properties-example gradle.properties
           ./gradlew detekt
 
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Run lint
+        run: |
+          cp gradle.properties-example gradle.properties
+          ./gradlew lintWordPressVanillaRelease
