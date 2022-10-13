@@ -9,11 +9,11 @@ import org.wordpress.android.analytics.AnalyticsTracker.Stat.BLOGGING_PROMPTS_LI
 import org.wordpress.android.fluxc.model.SiteModel
 import org.wordpress.android.util.analytics.AnalyticsTrackerWrapper
 
-class BloggingPromptsAnalyticsTrackerTest : BaseUnitTest() {
+class BloggingPromptsListAnalyticsTrackerTest : BaseUnitTest() {
     private val wrapper: AnalyticsTrackerWrapper = mock()
     private val site: SiteModel = mock()
 
-    private val analyticsTracker = BloggingPromptsAnalyticsTracker(
+    private val analyticsTracker = BloggingPromptsListAnalyticsTracker(
             analyticsTracker = wrapper
     )
 

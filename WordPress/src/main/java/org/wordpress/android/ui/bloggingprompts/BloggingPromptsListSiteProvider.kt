@@ -5,7 +5,7 @@ import org.wordpress.android.WordPress
 import org.wordpress.android.fluxc.model.SiteModel
 import javax.inject.Inject
 
-class BloggingPromptsSiteProvider @Inject constructor(
+class BloggingPromptsListSiteProvider @Inject constructor(
     private val savedStateHandle: SavedStateHandle
 ) {
     fun setSite(site: SiteModel) = savedStateHandle.set(WordPress.SITE, site)

@@ -12,9 +12,9 @@ import org.wordpress.android.databinding.BloggingPromptsActivityBinding
 import org.wordpress.android.fluxc.model.SiteModel
 
 @AndroidEntryPoint
-class BloggingPromptsActivity : AppCompatActivity() {
+class BloggingPromptsListActivity : AppCompatActivity() {
     private lateinit var site: SiteModel
-    private val viewModel: BloggingPromptsParentViewModel by viewModels()
+    private val viewModel: BloggingPromptsListViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,7 +22,7 @@ class BloggingPromptsActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         site = checkNotNull((intent.getSerializableExtra(WordPress.SITE) as? SiteModel)) {
-            "${WordPress.SITE} argument cannot be null, when launching ${BloggingPromptsActivity::class.simpleName}"
+            "${WordPress.SITE} argument cannot be null, when launching ${BloggingPromptsListActivity::class.simpleName}"
         }
         viewModel.start(site)
     }
@@ -48,7 +48,7 @@ class BloggingPromptsActivity : AppCompatActivity() {
         fun buildIntent(
             context: Context,
             site: SiteModel,
-        ) = Intent(context, BloggingPromptsActivity::class.java).apply {
+        ) = Intent(context, BloggingPromptsListActivity::class.java).apply {
             putExtra(WordPress.SITE, site)
         }
     }

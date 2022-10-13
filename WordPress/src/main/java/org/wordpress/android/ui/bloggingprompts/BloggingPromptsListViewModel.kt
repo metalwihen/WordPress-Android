@@ -11,9 +11,9 @@ import org.wordpress.android.ui.bloggingprompts.PromptSection.NOT_ANSWERED
 import javax.inject.Inject
 
 @HiltViewModel
-class BloggingPromptsParentViewModel @Inject constructor(
-    private val provider: BloggingPromptsSiteProvider,
-    private val analyticsTracker: BloggingPromptsAnalyticsTracker,
+class BloggingPromptsListViewModel @Inject constructor(
+    private val provider: BloggingPromptsListSiteProvider,
+    private val analyticsTracker: BloggingPromptsListAnalyticsTracker,
 ) : ViewModel() {
     fun start(site: SiteModel) {
         provider.setSite(site)

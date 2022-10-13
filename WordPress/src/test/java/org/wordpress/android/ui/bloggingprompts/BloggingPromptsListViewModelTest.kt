@@ -8,12 +8,12 @@ import org.junit.Test
 import org.wordpress.android.BaseUnitTest
 import org.wordpress.android.fluxc.model.SiteModel
 
-class BloggingPromptsParentViewModelTest : BaseUnitTest() {
-    private val analyticsTracker: BloggingPromptsAnalyticsTracker = mock()
-    private val provider: BloggingPromptsSiteProvider = mock()
+class BloggingPromptsListViewModelTest : BaseUnitTest() {
+    private val analyticsTracker: BloggingPromptsListAnalyticsTracker = mock()
+    private val provider: BloggingPromptsListSiteProvider = mock()
     private val site: SiteModel = mock()
 
-    private val viewModel = BloggingPromptsParentViewModel(
+    private val viewModel = BloggingPromptsListViewModel(
             provider = provider,
             analyticsTracker = analyticsTracker
     )

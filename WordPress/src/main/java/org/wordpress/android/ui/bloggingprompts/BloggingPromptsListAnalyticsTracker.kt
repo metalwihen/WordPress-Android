@@ -7,7 +7,7 @@ import org.wordpress.android.util.analytics.AnalyticsTrackerWrapper
 import java.util.Locale
 import javax.inject.Inject
 
-class BloggingPromptsAnalyticsTracker @Inject constructor(
+class BloggingPromptsListAnalyticsTracker @Inject constructor(
     private val analyticsTracker: AnalyticsTrackerWrapper
 ) {
     fun trackScreenShown(site: SiteModel, currentTab: PromptSection) =
