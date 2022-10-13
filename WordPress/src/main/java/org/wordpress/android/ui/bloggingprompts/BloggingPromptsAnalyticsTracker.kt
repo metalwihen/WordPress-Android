@@ -10,7 +10,7 @@ import javax.inject.Inject
 class BloggingPromptsAnalyticsTracker @Inject constructor(
     private val analyticsTracker: AnalyticsTrackerWrapper
 ) {
-    fun trackScreenAccessed(site: SiteModel, currentTab: PromptSection) =
+    fun trackScreenShown(site: SiteModel, currentTab: PromptSection) =
             analyticsTracker.track(
                     BLOGGING_PROMPTS_LIST_ACCESSED,
                     site,

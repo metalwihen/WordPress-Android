@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -15,9 +14,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import org.wordpress.android.R
 import org.wordpress.android.databinding.BloggingPromptsParentFragmentBinding
-import org.wordpress.android.ui.bloggingprompts.PromptSection.ALL
-import org.wordpress.android.ui.bloggingprompts.PromptSection.ANSWERED
-import org.wordpress.android.ui.bloggingprompts.PromptSection.NOT_ANSWERED
 
 @AndroidEntryPoint
 class BloggingPromptsParentFragment : Fragment() {
@@ -78,14 +74,6 @@ class BloggingPromptsParentFragment : Fragment() {
             return fragment
         }
     }
-}
-
-internal val promptsSections = listOf(ALL, ANSWERED, NOT_ANSWERED)
-
-enum class PromptSection(@StringRes val titleRes: Int) {
-    ALL(R.string.blogging_prompts_tab_all),
-    ANSWERED(R.string.blogging_prompts_tab_answered),
-    NOT_ANSWERED(R.string.blogging_prompts_tab_not_answered)
 }
 
 class BloggingPromptsPagerAdapter(private val parent: BloggingPromptsParentFragment) : FragmentStateAdapter(parent) {

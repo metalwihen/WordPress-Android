@@ -20,7 +20,7 @@ class BloggingPromptsAnalyticsTrackerTest : BaseUnitTest() {
     @Test
     fun `Should convert prompt section selected to lowercase when tracking screen accessed`() {
         val currentTab = PromptSection.NOT_ANSWERED
-        analyticsTracker.trackScreenAccessed(site, currentTab)
+        analyticsTracker.trackScreenShown(site, currentTab)
 
         verify(wrapper).track(
                 BLOGGING_PROMPTS_LIST_ACCESSED,

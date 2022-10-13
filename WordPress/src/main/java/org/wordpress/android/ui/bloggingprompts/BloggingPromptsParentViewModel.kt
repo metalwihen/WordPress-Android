@@ -1,31 +1,44 @@
 package org.wordpress.android.ui.bloggingprompts
 
-import androidx.annotation.VisibleForTesting
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import org.wordpress.android.WordPress
+import org.wordpress.android.R
 import org.wordpress.android.fluxc.model.SiteModel
+import org.wordpress.android.ui.bloggingprompts.PromptSection.ALL
+import org.wordpress.android.ui.bloggingprompts.PromptSection.ANSWERED
+import org.wordpress.android.ui.bloggingprompts.PromptSection.NOT_ANSWERED
 import javax.inject.Inject
 
 @HiltViewModel
 class BloggingPromptsParentViewModel @Inject constructor(
-    private val handle: BloggingPromptsSiteProvider,
+    private val provider: BloggingPromptsSiteProvider,
     private val analyticsTracker: BloggingPromptsAnalyticsTracker,
 ) : ViewModel() {
     fun start(site: SiteModel) {
-        handle.setSite(site)
+        provider.setSite(site)
     }
 
     fun onOpen(currentTab: PromptSection) {
-        analyticsTracker.trackScreenAccessed(getSite(), currentTab)
+        getSite()?.let {
+            analyticsTracker.trackScreenShown(it, currentTab)
+        }
     }
 
     fun onSectionSelected(currentTab: PromptSection) {
-        analyticsTracker.trackTabSelected(getSite(), currentTab)
+        getSite()?.let {
+            analyticsTracker.trackTabSelected(it, currentTab)
+        }
     }
 
-    @VisibleForTesting
-    internal fun getSite(): SiteModel = checkNotNull(handle.getSite()) {
-        "${WordPress.SITE} argument cannot be null"
-    }
+    private fun getSite(): SiteModel? = provider.getSite()
 }
+
+val promptsSections = listOf(ALL, ANSWERED, NOT_ANSWERED)
+
+enum class PromptSection(@StringRes val titleRes: Int) {
+    ALL(R.string.blogging_prompts_tab_all),
+    ANSWERED(R.string.blogging_prompts_tab_answered),
+    NOT_ANSWERED(R.string.blogging_prompts_tab_not_answered)
+}
+
