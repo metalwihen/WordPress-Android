@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -12,16 +11,15 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.android.material.tabs.TabLayout.Tab
 import com.google.android.material.tabs.TabLayoutMediator
+import dagger.hilt.android.AndroidEntryPoint
 import org.wordpress.android.R
 import org.wordpress.android.databinding.BloggingPromptsParentFragmentBinding
-import org.wordpress.android.ui.bloggingprompts.PromptSection.ALL
-import org.wordpress.android.ui.bloggingprompts.PromptSection.ANSWERED
-import org.wordpress.android.ui.bloggingprompts.PromptSection.NOT_ANSWERED
 
-class BloggingPromptsParentFragment : Fragment() {
+@AndroidEntryPoint
+class BloggingPromptsListParentFragment : Fragment() {
     private lateinit var binding: BloggingPromptsParentFragmentBinding
 
-    private val viewModel: BloggingPromptsParentViewModel by activityViewModels()
+    private val viewModel: BloggingPromptsListViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +35,9 @@ class BloggingPromptsParentFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.onOpen()
+
+        val currentTabPosition = binding.tabLayout.selectedTabPosition
+        viewModel.onOpen(promptsSections[currentTabPosition])
     }
 
     private fun setupToolbar(binding: BloggingPromptsParentFragmentBinding) {
@@ -54,7 +54,7 @@ class BloggingPromptsParentFragment : Fragment() {
 
     private fun setupTabLayout(binding: BloggingPromptsParentFragmentBinding) {
         with(binding) {
-            val adapter = BloggingPromptsPagerAdapter(this@BloggingPromptsParentFragment)
+            val adapter = BloggingPromptsListPagerAdapter(this@BloggingPromptsListParentFragment)
             promptPager.adapter = adapter
             TabLayoutMediator(tabLayout, promptPager) { tab, position ->
                 tab.text = adapter.getTabTitle(position)
@@ -66,8 +66,8 @@ class BloggingPromptsParentFragment : Fragment() {
     companion object {
         const val LIST_TYPE = "type_key"
 
-        fun newInstance(section: PromptSection): BloggingPromptsParentFragment {
-            val fragment = BloggingPromptsParentFragment()
+        fun newInstance(section: PromptSection): BloggingPromptsListParentFragment {
+            val fragment = BloggingPromptsListParentFragment()
             val bundle = Bundle()
             bundle.putSerializable(LIST_TYPE, section)
             fragment.arguments = bundle
@@ -76,15 +76,9 @@ class BloggingPromptsParentFragment : Fragment() {
     }
 }
 
-private val promptsSections = listOf(ALL, ANSWERED, NOT_ANSWERED)
-
-enum class PromptSection(@StringRes val titleRes: Int) {
-    ALL(R.string.blogging_prompts_tab_all),
-    ANSWERED(R.string.blogging_prompts_tab_answered),
-    NOT_ANSWERED(R.string.blogging_prompts_tab_not_answered)
-}
-
-class BloggingPromptsPagerAdapter(private val parent: BloggingPromptsParentFragment) : FragmentStateAdapter(parent) {
+private class BloggingPromptsListPagerAdapter(
+    private val parent: BloggingPromptsListParentFragment
+) : FragmentStateAdapter(parent) {
     override fun getItemCount(): Int = promptsSections.size
 
     override fun createFragment(position: Int): Fragment {
@@ -96,7 +90,7 @@ class BloggingPromptsPagerAdapter(private val parent: BloggingPromptsParentFragm
     }
 }
 
-private class SelectedTabListener(val viewModel: BloggingPromptsParentViewModel) : OnTabSelectedListener {
+private class SelectedTabListener(val viewModel: BloggingPromptsListViewModel) : OnTabSelectedListener {
     override fun onTabReselected(tab: Tab?) = Unit
 
     override fun onTabUnselected(tab: Tab?) = Unit
