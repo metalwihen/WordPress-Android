@@ -4,6 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import org.wordpress.android.R
 import org.wordpress.android.databinding.BloggingPromptsListFragmentBinding
 import org.wordpress.android.ui.ViewPagerFragment
@@ -13,8 +17,9 @@ import java.util.concurrent.TimeUnit
 
 class BloggingPromptsListFragment : ViewPagerFragment() {
     private lateinit var binding: BloggingPromptsListFragmentBinding
+    private lateinit var promptsListAdapter: BloggingPromptsListAdapter
 
-    override fun getScrollableViewForUniqueIdProvision(): View = binding.tempText
+    override fun getScrollableViewForUniqueIdProvision(): View = binding.promptsList
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = BloggingPromptsListFragmentBinding.inflate(inflater)
@@ -26,31 +31,52 @@ class BloggingPromptsListFragment : ViewPagerFragment() {
 
         val section = arguments?.getSerializable(LIST_TYPE) as? PromptSection
                 ?: PromptSection.ALL
-        binding.tempText.text = section.name
-        showContent()
+        initializeViews()
 
         // DUMMY LOGIC
         showLoading()
         binding.root.postDelayed(Runnable {
             if (!isAdded) return@Runnable
             when (section) {
-                PromptSection.ALL -> showEmpty()
+                PromptSection.ALL -> showContent(
+                        listOf(
+                                generateDummyData(),
+                                generateDummyData(),
+                                generateDummyData(),
+                                generateDummyData(),
+                                generateDummyData(),
+                                generateDummyData(),
+                                generateDummyData(),
+                                generateDummyData(),
+                                generateDummyData()
+                        )
+                )
                 PromptSection.NOT_ANSWERED -> showError()
                 PromptSection.ANSWERED -> showNoConnection()
             }.exhaustive
         }, TimeUnit.SECONDS.toMillis(2))
     }
 
-    private fun showContent() {
+    private fun initializeViews() {
         with(binding) {
-            tempText.setVisible(true)
+            promptsList.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+            promptsList.addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
+            promptsListAdapter = BloggingPromptsListAdapter()
+            promptsList.adapter = promptsListAdapter
+        }
+    }
+
+    private fun showContent(list: List<BloggingPromptsListItem>) {
+        with(binding) {
+            promptsListAdapter.update(list)
+            promptsList.setVisible(true)
             actionableEmptyView.setVisible(false)
         }
     }
 
     private fun showEmpty() {
         with(binding) {
-            tempText.setVisible(false)
+            promptsList.setVisible(false)
             with(actionableEmptyView) {
                 setVisible(true)
                 image.apply {
@@ -68,7 +94,7 @@ class BloggingPromptsListFragment : ViewPagerFragment() {
 
     private fun showError() {
         with(binding) {
-            tempText.setVisible(false)
+            promptsList.setVisible(false)
             with(actionableEmptyView) {
                 setVisible(true)
                 image.apply {
@@ -89,7 +115,7 @@ class BloggingPromptsListFragment : ViewPagerFragment() {
 
     private fun showNoConnection() {
         with(binding) {
-            tempText.setVisible(false)
+            promptsList.setVisible(false)
             with(actionableEmptyView) {
                 setVisible(true)
                 image.apply {
@@ -110,7 +136,7 @@ class BloggingPromptsListFragment : ViewPagerFragment() {
 
     fun showLoading() {
         with(binding) {
-            tempText.setVisible(false)
+            promptsList.setVisible(false)
             with(actionableEmptyView) {
                 setVisible(true)
                 image.setVisible(false)

@@ -4112,6 +4112,11 @@ translators: %s: Select control option value e.g: "Auto, 25%". -->
     <string name="blogging_prompts_state_error_subtitle">There was an error loading prompts.</string>
     <string name="blogging_prompts_state_no_connection_title">Unable to load this content right now</string>
     <string name="blogging_prompts_state_no_connection_subtitle">Check your network connection and try again.</string>
+    <string name="blogging_prompts_list_item_separator">·</string>
+    <string name="blogging_prompts_list_item_count_answers_zero">0 answers</string>
+    <string name="blogging_prompts_list_item_count_answers_one">1 answer</string>
+    <string name="blogging_prompts_list_item_count_answers_many">%1$d answers</string>
+    <string name="blogging_prompts_list_item_answered">Answered</string>
 
     <!-- Editor module -->
     <string name="post_content" tools:ignore="UnusedResources" a8c-src-lib="module:editor">Content</string>
