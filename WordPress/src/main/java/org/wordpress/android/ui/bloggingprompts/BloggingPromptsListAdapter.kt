@@ -2,15 +2,13 @@ package org.wordpress.android.ui.bloggingprompts
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.DiffUtil.Callback
 import androidx.recyclerview.widget.RecyclerView
 import org.wordpress.android.R
 import org.wordpress.android.databinding.BloggingPromptsListItemBinding
+import org.wordpress.android.util.extensions.getQuantityString
 import org.wordpress.android.util.extensions.setVisible
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class BloggingPromptsListAdapter() : RecyclerView.Adapter<BloggingPromptsListItemViewHolder>() {
     private var items = listOf<BloggingPromptsListItem>()
@@ -45,17 +43,13 @@ class BloggingPromptsListItemViewHolder(
     fun bind(prompt: BloggingPromptsListItem) {
         with(binding) {
             promptTitle.text = prompt.title
-            promptSubtitleAnswerCount.text =
-                    when (prompt.respondentsCount) {
-                        0 -> binding.root.context.getString(R.string.blogging_prompts_list_item_count_answers_zero)
-                        1 -> binding.root.context.getString(R.string.blogging_prompts_list_item_count_answers_one)
-                        else -> binding.root.context.getString(
-                                R.string.blogging_prompts_list_item_count_answers_many,
-                                prompt.respondentsCount
-                        )
-                    }
-            promptSubtitleDate.text =
-                    SimpleDateFormat("MMM d", Locale.getDefault()).format(prompt.date)
+            promptSubtitleAnswerCount.text = root.getQuantityString(
+                    prompt.respondentsCount,
+                    R.string.blogging_prompts_list_item_count_answers_zero,
+                    R.string.blogging_prompts_list_item_count_answers_one,
+                    R.string.blogging_prompts_list_item_count_answers_many
+            )
+            promptSubtitleDate.text = prompt.dateLabel
             groupAnsweredLabel.setVisible(prompt.isAnswered)
         }
     }

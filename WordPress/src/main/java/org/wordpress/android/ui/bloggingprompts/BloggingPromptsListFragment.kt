@@ -34,6 +34,7 @@ class BloggingPromptsListFragment : ViewPagerFragment() {
         initializeViews()
 
         // DUMMY LOGIC
+        showEmpty()
         showLoading()
         binding.root.postDelayed(Runnable {
             if (!isAdded) return@Runnable
@@ -58,11 +59,11 @@ class BloggingPromptsListFragment : ViewPagerFragment() {
     }
 
     private fun initializeViews() {
-        with(binding) {
-            promptsList.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-            promptsList.addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
+        with(binding.promptsList) {
+            layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+            addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
             promptsListAdapter = BloggingPromptsListAdapter()
-            promptsList.adapter = promptsListAdapter
+            adapter = promptsListAdapter
         }
     }
 
