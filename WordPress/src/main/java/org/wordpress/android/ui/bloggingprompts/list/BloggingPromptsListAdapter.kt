@@ -1,4 +1,4 @@
-package org.wordpress.android.ui.bloggingprompts
+package org.wordpress.android.ui.bloggingprompts.list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

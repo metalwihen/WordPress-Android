@@ -1,4 +1,4 @@
-package org.wordpress.android.ui.bloggingprompts
+package org.wordpress.android.ui.bloggingprompts.list
 
 import androidx.lifecycle.SavedStateHandle
 import org.wordpress.android.WordPress

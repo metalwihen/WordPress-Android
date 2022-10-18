@@ -1,4 +1,4 @@
-package org.wordpress.android.ui.bloggingprompts
+package org.wordpress.android.ui.bloggingprompts.list
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,6 +11,9 @@ import androidx.recyclerview.widget.RecyclerView
 import org.wordpress.android.R
 import org.wordpress.android.databinding.BloggingPromptsListFragmentBinding
 import org.wordpress.android.ui.ViewPagerFragment
+import org.wordpress.android.ui.bloggingprompts.list.PromptSection.ALL
+import org.wordpress.android.ui.bloggingprompts.list.PromptSection.ANSWERED
+import org.wordpress.android.ui.bloggingprompts.list.PromptSection.NOT_ANSWERED
 import org.wordpress.android.util.extensions.exhaustive
 import org.wordpress.android.util.extensions.setVisible
 import java.util.concurrent.TimeUnit
@@ -30,7 +33,7 @@ class BloggingPromptsListFragment : ViewPagerFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val section = arguments?.getSerializable(LIST_TYPE) as? PromptSection
-                ?: PromptSection.ALL
+                ?: ALL
         initializeViews()
 
         // DUMMY LOGIC
@@ -39,7 +42,7 @@ class BloggingPromptsListFragment : ViewPagerFragment() {
         binding.root.postDelayed(Runnable {
             if (!isAdded) return@Runnable
             when (section) {
-                PromptSection.ALL -> showContent(
+                ALL -> showContent(
                         listOf(
                                 generateDummyData(),
                                 generateDummyData(),
@@ -52,8 +55,8 @@ class BloggingPromptsListFragment : ViewPagerFragment() {
                                 generateDummyData()
                         )
                 )
-                PromptSection.NOT_ANSWERED -> showError()
-                PromptSection.ANSWERED -> showNoConnection()
+                NOT_ANSWERED -> showError()
+                ANSWERED -> showNoConnection()
             }.exhaustive
         }, TimeUnit.SECONDS.toMillis(2))
     }

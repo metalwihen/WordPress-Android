@@ -1,4 +1,4 @@
-package org.wordpress.android.ui.bloggingprompts
+package org.wordpress.android.ui.bloggingprompts.list
 
 import org.wordpress.android.analytics.AnalyticsTracker.Stat.BLOGGING_PROMPTS_LIST_ACCESSED
 import org.wordpress.android.analytics.AnalyticsTracker.Stat.BLOGGING_PROMPTS_LIST_TAB_CHANGED

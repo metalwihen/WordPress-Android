@@ -1,4 +1,4 @@
-package org.wordpress.android.ui.bloggingprompts
+package org.wordpress.android.ui.bloggingprompts.list
 
 import android.content.Context
 import android.content.Intent
@@ -14,7 +14,7 @@ import org.wordpress.android.fluxc.model.SiteModel
 @AndroidEntryPoint
 class BloggingPromptsListActivity : AppCompatActivity() {
     private lateinit var site: SiteModel
-    private val viewModel: BloggingPromptsListViewModel by viewModels()
+    private val viewModel: BloggingPromptsListParentViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

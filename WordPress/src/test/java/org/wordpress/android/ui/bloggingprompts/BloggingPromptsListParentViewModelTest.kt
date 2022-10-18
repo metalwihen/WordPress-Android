@@ -7,13 +7,18 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.wordpress.android.BaseUnitTest
 import org.wordpress.android.fluxc.model.SiteModel
+import org.wordpress.android.ui.bloggingprompts.list.BloggingPromptsListAnalyticsTracker
+import org.wordpress.android.ui.bloggingprompts.list.BloggingPromptsListParentViewModel
+import org.wordpress.android.ui.bloggingprompts.list.BloggingPromptsListSiteProvider
+import org.wordpress.android.ui.bloggingprompts.list.PromptSection
+import org.wordpress.android.ui.bloggingprompts.list.promptsSections
 
-class BloggingPromptsListViewModelTest : BaseUnitTest() {
+class BloggingPromptsListParentViewModelTest : BaseUnitTest() {
     private val analyticsTracker: BloggingPromptsListAnalyticsTracker = mock()
     private val provider: BloggingPromptsListSiteProvider = mock()
     private val site: SiteModel = mock()
 
-    private val viewModel = BloggingPromptsListViewModel(
+    private val viewModel = BloggingPromptsListParentViewModel(
             provider = provider,
             analyticsTracker = analyticsTracker
     )

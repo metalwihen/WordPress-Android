@@ -1,4 +1,4 @@
-package org.wordpress.android.ui.bloggingprompts
+package org.wordpress.android.ui.bloggingprompts.list
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -19,7 +19,7 @@ import org.wordpress.android.databinding.BloggingPromptsParentFragmentBinding
 class BloggingPromptsListParentFragment : Fragment() {
     private lateinit var binding: BloggingPromptsParentFragmentBinding
 
-    private val viewModel: BloggingPromptsListViewModel by activityViewModels()
+    private val viewModel: BloggingPromptsListParentViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,7 +90,7 @@ private class BloggingPromptsListPagerAdapter(
     }
 }
 
-private class SelectedTabListener(val viewModel: BloggingPromptsListViewModel) : OnTabSelectedListener {
+private class SelectedTabListener(val viewModel: BloggingPromptsListParentViewModel) : OnTabSelectedListener {
     override fun onTabReselected(tab: Tab?) = Unit
 
     override fun onTabUnselected(tab: Tab?) = Unit
