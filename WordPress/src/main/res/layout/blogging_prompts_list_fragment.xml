@@ -2,17 +2,18 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/coordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <!-- Content -->
-    <TextView
-        android:id="@+id/temp_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        tools:text="PROMPTS LIST PAGE" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/prompts_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical"
+        android:visibility="gone"
+        tools:listitem="@layout/blogging_prompts_list_item"
+        tools:visibility="visible" />
 
     <!-- Loading, Empty, Error -->
     <org.wordpress.android.ui.ActionableEmptyView
@@ -21,8 +22,8 @@
         android:layout_height="match_parent"
         android:visibility="gone"
         app:aevImage="@drawable/img_illustration_empty_results_216dp"
-        app:aevTitle="@string/blogging_prompts_state_empty_title"
         app:aevSubtitle="@string/blogging_prompts_state_error_subtitle"
+        app:aevTitle="@string/blogging_prompts_state_empty_title"
         tools:visibility="visible" />
 
 </FrameLayout>
