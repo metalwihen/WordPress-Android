@@ -43,13 +43,33 @@ class BloggingPromptsListViewModel @Inject constructor() : ViewModel() {
             }.exhaustive
         }
     }
+
+    fun onClickButtonRetry() {
+        errorViewState.postValue(ErrorViewState.Hidden)
+        contentViewState.postValue(
+                ContentViewState.Content(
+                        listOf(
+                                generateDummyData(),
+                                generateDummyData(),
+                                generateDummyData(),
+                                generateDummyData(),
+                                generateDummyData(),
+                                generateDummyData(),
+                                generateDummyData(),
+                                generateDummyData(),
+                                generateDummyData()
+                        )
+                )
+        )
+    }
 }
 
 sealed class ErrorViewState(
     val isVisible: Boolean,
     @DrawableRes val imageResId: Int? = null,
     @StringRes val titleTextResId: Int? = null,
-    @StringRes val subtitleTextResId: Int? = null
+    @StringRes val subtitleTextResId: Int? = null,
+    @StringRes val buttonTextResId: Int? = null
 ) {
     object Hidden : ErrorViewState(isVisible = false)
 
@@ -69,6 +89,7 @@ sealed class ErrorViewState(
             imageResId = R.drawable.img_illustration_empty_results_216dp,
             titleTextResId = R.string.blogging_prompts_state_error_title,
             subtitleTextResId = R.string.blogging_prompts_state_error_subtitle,
+            buttonTextResId = R.string.blogging_prompts_state_error_retry
     )
 
     object NoConnection : ErrorViewState(
@@ -76,6 +97,7 @@ sealed class ErrorViewState(
             imageResId = R.drawable.img_illustration_cloud_off_152dp,
             titleTextResId = R.string.blogging_prompts_state_no_connection_title,
             subtitleTextResId = R.string.blogging_prompts_state_no_connection_subtitle,
+            buttonTextResId = R.string.blogging_prompts_state_error_retry
     )
 }
 

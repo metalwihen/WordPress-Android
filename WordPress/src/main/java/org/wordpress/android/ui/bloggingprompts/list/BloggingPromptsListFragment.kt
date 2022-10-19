@@ -63,7 +63,8 @@ class BloggingPromptsListFragment : ViewPagerFragment() {
                     it.isVisible,
                     it.imageResId,
                     it.titleTextResId,
-                    it.subtitleTextResId
+                    it.subtitleTextResId,
+                    it.buttonTextResId
             )
         }
     }
@@ -80,7 +81,8 @@ class BloggingPromptsListFragment : ViewPagerFragment() {
         isVisible: Boolean = false,
         @DrawableRes imageResId: Int? = null,
         @StringRes titleTextResId: Int? = null,
-        @StringRes subtitleTextResId: Int? = null
+        @StringRes subtitleTextResId: Int? = null,
+        @StringRes buttonTextResId: Int? = null
     ) {
         with(binding.actionableEmptyView) {
             setVisible(isVisible)
@@ -100,6 +102,15 @@ class BloggingPromptsListFragment : ViewPagerFragment() {
                 subtitleTextResId?.let {
                     setVisible(true)
                     setText(it)
+                } ?: setVisible(false)
+            }
+            with(button) {
+                buttonTextResId?.let {
+                    setVisible(true)
+                    setText(it)
+                    setOnClickListener {
+                        viewModel.onClickButtonRetry()
+                    }
                 } ?: setVisible(false)
             }
         }
