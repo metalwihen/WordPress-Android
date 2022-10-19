@@ -5,22 +5,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import org.wordpress.android.R
 import org.wordpress.android.databinding.BloggingPromptsListFragmentBinding
 import org.wordpress.android.ui.ViewPagerFragment
-import org.wordpress.android.ui.bloggingprompts.list.PromptSection.ALL
-import org.wordpress.android.ui.bloggingprompts.list.PromptSection.ANSWERED
-import org.wordpress.android.ui.bloggingprompts.list.PromptSection.NOT_ANSWERED
-import org.wordpress.android.util.extensions.exhaustive
 import org.wordpress.android.util.extensions.setVisible
-import java.util.concurrent.TimeUnit
 
 class BloggingPromptsListFragment : ViewPagerFragment() {
+
     private lateinit var binding: BloggingPromptsListFragmentBinding
     private lateinit var promptsListAdapter: BloggingPromptsListAdapter
+
+    private val parentViewModel: BloggingPromptsListParentViewModel by activityViewModels()
+    private val viewModel: BloggingPromptsListViewModel by viewModels()
 
     override fun getScrollableViewForUniqueIdProvision(): View = binding.promptsList
 
@@ -33,32 +35,11 @@ class BloggingPromptsListFragment : ViewPagerFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val section = arguments?.getSerializable(LIST_TYPE) as? PromptSection
-                ?: ALL
+        val site = parentViewModel.getSite()
         initializeViews()
+        setupObservers()
 
-        // DUMMY LOGIC
-        showEmpty()
-        showLoading()
-        binding.root.postDelayed(Runnable {
-            if (!isAdded) return@Runnable
-            when (section) {
-                ALL -> showContent(
-                        listOf(
-                                generateDummyData(),
-                                generateDummyData(),
-                                generateDummyData(),
-                                generateDummyData(),
-                                generateDummyData(),
-                                generateDummyData(),
-                                generateDummyData(),
-                                generateDummyData(),
-                                generateDummyData()
-                        )
-                )
-                NOT_ANSWERED -> showError()
-                ANSWERED -> showNoConnection()
-            }.exhaustive
-        }, TimeUnit.SECONDS.toMillis(2))
+        viewModel.onOpen(site, section)
     }
 
     private fun initializeViews() {
@@ -70,85 +51,56 @@ class BloggingPromptsListFragment : ViewPagerFragment() {
         }
     }
 
-    private fun showContent(list: List<BloggingPromptsListItem>) {
-        with(binding) {
-            promptsListAdapter.update(list)
-            promptsList.setVisible(true)
-            actionableEmptyView.setVisible(false)
+    private fun setupObservers(){
+        viewModel.contentViewState.observe(viewLifecycleOwner) {
+            setContentViewVisibility(
+                    it.isVisible,
+                    it.list
+            )
+        }
+        viewModel.errorViewState.observe(viewLifecycleOwner) {
+            setErrorViewVisibility(
+                    it.isVisible,
+                    it.imageResId,
+                    it.titleTextResId,
+                    it.subtitleTextResId
+            )
         }
     }
 
-    private fun showEmpty() {
-        with(binding) {
-            promptsList.setVisible(false)
-            with(actionableEmptyView) {
-                setVisible(true)
-                image.apply {
+    private fun setContentViewVisibility(
+        isVisible: Boolean = false,
+        list: List<BloggingPromptsListItem> = emptyList()
+    ) {
+        promptsListAdapter.update(list)
+        binding.promptsList.setVisible(isVisible)
+    }
+
+    private fun setErrorViewVisibility(
+        isVisible: Boolean = false,
+        @DrawableRes imageResId: Int? = null,
+        @StringRes titleTextResId: Int? = null,
+        @StringRes subtitleTextResId: Int? = null
+    ) {
+        with(binding.actionableEmptyView) {
+            setVisible(isVisible)
+            with(image) {
+                imageResId?.let {
                     setVisible(true)
-                    setImageResource(R.drawable.img_illustration_empty_results_216dp)
-                }
-                title.apply {
-                    setVisible(true)
-                    setText(R.string.blogging_prompts_state_empty_title)
-                }
-                subtitle.setVisible(false)
+                    setImageResource(it)
+                } ?: setVisible(false)
             }
-        }
-    }
-
-    private fun showError() {
-        with(binding) {
-            promptsList.setVisible(false)
-            with(actionableEmptyView) {
-                setVisible(true)
-                image.apply {
+            with(title) {
+                titleTextResId?.let {
                     setVisible(true)
-                    setImageResource(R.drawable.img_illustration_empty_results_216dp)
-                }
-                title.apply {
-                    setVisible(true)
-                    setText(R.string.blogging_prompts_state_error_title)
-                }
-                subtitle.apply {
-                    setVisible(true)
-                    setText(R.string.blogging_prompts_state_error_subtitle)
-                }
+                    setText(it)
+                } ?: setVisible(false)
             }
-        }
-    }
-
-    private fun showNoConnection() {
-        with(binding) {
-            promptsList.setVisible(false)
-            with(actionableEmptyView) {
-                setVisible(true)
-                image.apply {
+            with(subtitle) {
+                subtitleTextResId?.let {
                     setVisible(true)
-                    setImageResource(R.drawable.img_illustration_cloud_off_152dp)
-                }
-                title.apply {
-                    setVisible(true)
-                    setText(R.string.blogging_prompts_state_no_connection_title)
-                }
-                subtitle.apply {
-                    setVisible(true)
-                    setText(R.string.blogging_prompts_state_no_connection_subtitle)
-                }
-            }
-        }
-    }
-
-    fun showLoading() {
-        with(binding) {
-            promptsList.setVisible(false)
-            with(actionableEmptyView) {
-                setVisible(true)
-                image.setVisible(false)
-                title.apply {
-                    setVisible(true)
-                    setText(R.string.blogging_prompts_state_loading_title)
-                }
-                subtitle.setVisible(false)
+                    setText(it)
+                } ?: setVisible(false)
             }
         }
     }

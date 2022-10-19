@@ -31,7 +31,7 @@ class BloggingPromptsListParentViewModel @Inject constructor(
         }
     }
 
-    private fun getSite(): SiteModel? = provider.getSite()
+    fun getSite(): SiteModel? = provider.getSite()
 }
 
 val promptsSections = listOf(ALL, ANSWERED, NOT_ANSWERED)
