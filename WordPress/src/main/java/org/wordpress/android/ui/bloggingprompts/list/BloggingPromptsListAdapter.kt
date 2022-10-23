@@ -7,10 +7,10 @@ import androidx.recyclerview.widget.DiffUtil.Callback
 import androidx.recyclerview.widget.RecyclerView
 import org.wordpress.android.R
 import org.wordpress.android.databinding.BloggingPromptsListItemBinding
-import org.wordpress.android.util.extensions.getQuantityString
+import org.wordpress.android.util.StringUtils
 import org.wordpress.android.util.extensions.setVisible
 
-class BloggingPromptsListAdapter() : RecyclerView.Adapter<BloggingPromptsListItemViewHolder>() {
+class BloggingPromptsListAdapter : RecyclerView.Adapter<BloggingPromptsListItemViewHolder>() {
     private var items = listOf<BloggingPromptsListItem>()
 
     fun update(newItems: List<BloggingPromptsListItem>) {
@@ -43,11 +43,12 @@ class BloggingPromptsListItemViewHolder(
     fun bind(prompt: BloggingPromptsListItem) {
         with(binding) {
             promptTitle.text = prompt.title
-            promptSubtitleAnswerCount.text = root.getQuantityString(
-                    prompt.respondentsCount,
+            promptSubtitleAnswerCount.text = StringUtils.getQuantityString(
+                    binding.root.context,
                     R.string.blogging_prompts_list_item_count_answers_zero,
                     R.string.blogging_prompts_list_item_count_answers_one,
-                    R.string.blogging_prompts_list_item_count_answers_many
+                    R.string.blogging_prompts_list_item_count_answers_many,
+                    prompt.respondentsCount
             )
             promptSubtitleDate.text = prompt.dateLabel
             groupAnsweredLabel.setVisible(prompt.isAnswered)

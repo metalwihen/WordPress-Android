@@ -12,11 +12,17 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import dagger.hilt.android.AndroidEntryPoint
 import org.wordpress.android.databinding.BloggingPromptsListFragmentBinding
 import org.wordpress.android.ui.ViewPagerFragment
+import org.wordpress.android.ui.utils.UiHelpers
 import org.wordpress.android.util.extensions.setVisible
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class BloggingPromptsListFragment : ViewPagerFragment() {
+
+    @Inject lateinit var uiHelpers: UiHelpers
 
     private lateinit var binding: BloggingPromptsListFragmentBinding
     private lateinit var promptsListAdapter: BloggingPromptsListAdapter
@@ -88,32 +94,12 @@ class BloggingPromptsListFragment : ViewPagerFragment() {
     ) {
         with(binding.actionableEmptyView) {
             setVisible(isVisible)
-            with(image) {
-                imageResId?.let {
-                    setVisible(true)
-                    setImageResource(it)
-                } ?: setVisible(false)
-            }
-            with(title) {
-                titleTextResId?.let {
-                    setVisible(true)
-                    setText(it)
-                } ?: setVisible(false)
-            }
-            with(subtitle) {
-                subtitleTextResId?.let {
-                    setVisible(true)
-                    setText(it)
-                } ?: setVisible(false)
-            }
-            with(button) {
-                buttonTextResId?.let {
-                    setVisible(true)
-                    setText(it)
-                    setOnClickListener {
-                        viewModel.onClickButtonRetry()
-                    }
-                } ?: setVisible(false)
+            uiHelpers.setImageOrHide(image, imageResId)
+            uiHelpers.setTextOrHide(title, titleTextResId)
+            uiHelpers.setTextOrHide(subtitle, subtitleTextResId)
+            uiHelpers.setTextOrHide(button, buttonTextResId)
+            button.setOnClickListener {
+                viewModel.onClickButtonRetry()
             }
         }
     }

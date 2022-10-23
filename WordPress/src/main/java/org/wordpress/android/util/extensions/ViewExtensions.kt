@@ -83,14 +83,3 @@ fun RecyclerView.disableAnimation() {
 }
 
 fun View.getString(@StringRes stringRes: Int) = context.getString(stringRes)
-
-fun View.getQuantityString(
-    quantity: Int,
-    @StringRes zeroRes: Int,
-    @StringRes oneRes: Int,
-    @StringRes manyRes: Int
-) = when (quantity) {
-    0 -> context.getString(zeroRes)
-    1 -> context.getString(oneRes)
-    else -> context.getString(manyRes, quantity)
-}
