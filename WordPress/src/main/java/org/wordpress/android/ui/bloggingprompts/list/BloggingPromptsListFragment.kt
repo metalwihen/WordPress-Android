@@ -51,21 +51,23 @@ class BloggingPromptsListFragment : ViewPagerFragment() {
         }
     }
 
-    private fun setupObservers(){
-        viewModel.contentViewState.observe(viewLifecycleOwner) {
-            setContentViewVisibility(
-                    it.isVisible,
-                    it.list
-            )
-        }
-        viewModel.errorViewState.observe(viewLifecycleOwner) {
-            setErrorViewVisibility(
-                    it.isVisible,
-                    it.imageResId,
-                    it.titleTextResId,
-                    it.subtitleTextResId,
-                    it.buttonTextResId
-            )
+    private fun setupObservers() {
+        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            uiState.contentViewState.let {
+                setContentViewVisibility(
+                        it.isVisible,
+                        it.list
+                )
+            }
+            uiState.errorViewState.let {
+                setErrorViewVisibility(
+                        it.isVisible,
+                        it.imageResId,
+                        it.titleTextResId,
+                        it.subtitleTextResId,
+                        it.buttonTextResId
+                )
+            }
         }
     }
 

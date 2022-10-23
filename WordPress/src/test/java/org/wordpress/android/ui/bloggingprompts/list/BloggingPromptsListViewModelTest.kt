@@ -17,15 +17,15 @@ class BloggingPromptsListParentViewModelTest : BaseUnitTest() {
     fun `Should show Error view if siteModel is null`() {
         viewModel.onOpen(site = null, section = ALL)
 
-        assertEquals(ErrorViewState.Error, viewModel.errorViewState.value)
-        assertEquals(ContentViewState.Hidden, viewModel.contentViewState.value)
+        assertEquals(ErrorViewState.Error, viewModel.uiState.value?.errorViewState)
+        assertEquals(ContentViewState.Hidden, viewModel.uiState.value?.contentViewState)
     }
 
     @Test
     fun `Should show Error view if section null`() {
         viewModel.onOpen(site = site, section = null)
 
-        assertEquals(ErrorViewState.Error, viewModel.errorViewState.value)
-        assertEquals(ContentViewState.Hidden, viewModel.contentViewState.value)
+        assertEquals(ErrorViewState.Error, viewModel.uiState.value?.errorViewState)
+        assertEquals(ContentViewState.Hidden, viewModel.uiState.value?.contentViewState)
     }
 }

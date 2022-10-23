@@ -2,6 +2,7 @@ package org.wordpress.android.ui.bloggingprompts.list
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,54 +16,54 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BloggingPromptsListViewModel @Inject constructor() : ViewModel() {
-    private val _contentViewState = MutableLiveData<ContentViewState>()
-    val contentViewState = _contentViewState
-
-    private val _errorViewState = MutableLiveData<ErrorViewState>()
-    val errorViewState = _errorViewState
+    private val _uiState = MutableLiveData<UiState>()
+    val uiState: LiveData<UiState> = _uiState
 
     fun onOpen(site: SiteModel?, section: PromptSection?) {
         if (site == null || section == null) {
-            contentViewState.postValue(ContentViewState.Hidden)
-            errorViewState.postValue(ErrorViewState.Error)
+            _uiState.postValue(UiState(ContentViewState.Hidden, ErrorViewState.Error))
         } else {
             // DUMMY LOGIC
             when (section) {
                 ALL -> {
-                    contentViewState.postValue(ContentViewState.Hidden)
-                    errorViewState.postValue(ErrorViewState.NoConnection)
+                    _uiState.postValue(UiState(ContentViewState.Hidden, ErrorViewState.NoConnection))
                 }
                 NOT_ANSWERED -> {
-                    contentViewState.postValue(ContentViewState.Hidden)
-                    errorViewState.postValue(ErrorViewState.Empty)
+                    _uiState.postValue(UiState(ContentViewState.Hidden, ErrorViewState.Empty))
                 }
                 ANSWERED -> {
-                    contentViewState.postValue(ContentViewState.Hidden)
-                    errorViewState.postValue(ErrorViewState.Loading)
+                    _uiState.postValue(UiState(ContentViewState.Hidden, ErrorViewState.Loading))
                 }
             }.exhaustive
         }
     }
 
     fun onClickButtonRetry() {
-        errorViewState.postValue(ErrorViewState.Hidden)
-        contentViewState.postValue(
-                ContentViewState.Content(
-                        listOf(
-                                generateDummyData(),
-                                generateDummyData(),
-                                generateDummyData(),
-                                generateDummyData(),
-                                generateDummyData(),
-                                generateDummyData(),
-                                generateDummyData(),
-                                generateDummyData(),
-                                generateDummyData()
-                        )
+        _uiState.postValue(
+                UiState(
+                        ContentViewState.Content(
+                                listOf(
+                                        generateDummyData(),
+                                        generateDummyData(),
+                                        generateDummyData(),
+                                        generateDummyData(),
+                                        generateDummyData(),
+                                        generateDummyData(),
+                                        generateDummyData(),
+                                        generateDummyData(),
+                                        generateDummyData()
+                                )
+                        ),
+                        ErrorViewState.Hidden
                 )
         )
     }
 }
+
+data class UiState(
+    val contentViewState: ContentViewState,
+    val errorViewState: ErrorViewState
+)
 
 sealed class ErrorViewState(
     val isVisible: Boolean,
