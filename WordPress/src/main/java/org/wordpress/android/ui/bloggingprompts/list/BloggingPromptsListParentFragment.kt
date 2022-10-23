@@ -62,18 +62,6 @@ class BloggingPromptsListParentFragment : Fragment() {
             tabLayout.addOnTabSelectedListener(SelectedTabListener(viewModel))
         }
     }
-
-    companion object {
-        const val LIST_TYPE = "type_key"
-
-        fun newInstance(section: PromptSection): BloggingPromptsListParentFragment {
-            val fragment = BloggingPromptsListParentFragment()
-            val bundle = Bundle()
-            bundle.putSerializable(LIST_TYPE, section)
-            fragment.arguments = bundle
-            return fragment
-        }
-    }
 }
 
 private class BloggingPromptsListPagerAdapter(

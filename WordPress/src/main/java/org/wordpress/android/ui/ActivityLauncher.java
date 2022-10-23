@@ -1754,7 +1754,7 @@ public class ActivityLauncher {
     }
 
     public static void viewMorePrompts(@NonNull Context context, SiteModel site) {
-        BloggingPromptsListActivity.start(context, site);
+        BloggingPromptsListActivity.Companion.start(context, site);
     }
 
     public static void showLoginPrologue(@NonNull Context context) {

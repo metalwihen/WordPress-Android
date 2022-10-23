@@ -36,20 +36,11 @@ class BloggingPromptsListActivity : AppCompatActivity() {
     }
 
     companion object {
-        @JvmStatic
-        @JvmOverloads
         fun start(
             context: Context,
-            site: SiteModel,
-        ) = context.startActivity(buildIntent(context, site))
-
-        @JvmStatic
-        @JvmOverloads
-        fun buildIntent(
-            context: Context,
-            site: SiteModel,
-        ) = Intent(context, BloggingPromptsListActivity::class.java).apply {
-            putExtra(WordPress.SITE, site)
-        }
+            site: SiteModel
+        ) = context.startActivity(
+                Intent(context, BloggingPromptsListActivity::class.java)
+                        .apply { putExtra(WordPress.SITE, site) })
     }
 }
