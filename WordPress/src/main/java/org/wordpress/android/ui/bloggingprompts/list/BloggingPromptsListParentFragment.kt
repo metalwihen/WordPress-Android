@@ -10,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.android.material.tabs.TabLayout.Tab
+import com.google.android.material.tabs.TabLayout.Tab.INVALID_POSITION
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import org.wordpress.android.R
@@ -84,6 +85,9 @@ private class SelectedTabListener(val viewModel: BloggingPromptsListParentViewMo
     override fun onTabUnselected(tab: Tab?) = Unit
 
     override fun onTabSelected(tab: Tab) {
-        viewModel.onSectionSelected(promptsSections[tab.position])
+        val tabPosition = tab.position.takeIf { it != INVALID_POSITION } ?: POSITION_FIRST_TAB
+        viewModel.onSectionSelected(promptsSections[tabPosition])
     }
 }
+
+internal const val POSITION_FIRST_TAB = 0
