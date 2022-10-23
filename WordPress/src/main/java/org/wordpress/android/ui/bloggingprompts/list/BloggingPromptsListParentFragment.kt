@@ -34,13 +34,6 @@ class BloggingPromptsListParentFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val currentTabPosition = binding.tabLayout.selectedTabPosition
-        viewModel.onOpen(promptsSections[currentTabPosition])
-    }
-
     private fun setupToolbar(binding: BloggingPromptsParentFragmentBinding) {
         with(binding) {
             with(activity as AppCompatActivity) {
@@ -85,9 +78,7 @@ private class SelectedTabListener(val viewModel: BloggingPromptsListParentViewMo
     override fun onTabUnselected(tab: Tab?) = Unit
 
     override fun onTabSelected(tab: Tab) {
-        val tabPosition = tab.position.takeIf { it != INVALID_POSITION } ?: POSITION_FIRST_TAB
+        val tabPosition = tab.position.takeIf { it != INVALID_POSITION } ?: POSITION_DEFAULT_TAB
         viewModel.onSectionSelected(promptsSections[tabPosition])
     }
 }
-
-internal const val POSITION_FIRST_TAB = 0

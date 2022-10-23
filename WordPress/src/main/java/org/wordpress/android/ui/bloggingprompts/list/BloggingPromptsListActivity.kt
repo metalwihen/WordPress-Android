@@ -24,7 +24,7 @@ class BloggingPromptsListActivity : AppCompatActivity() {
         site = checkNotNull((intent.getSerializableExtra(WordPress.SITE) as? SiteModel)) {
             "${WordPress.SITE} argument cannot be null, when launching ${BloggingPromptsListActivity::class.simpleName}"
         }
-        viewModel.start(site)
+        viewModel.start(site, promptsSections[POSITION_DEFAULT_TAB])
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

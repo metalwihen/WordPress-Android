@@ -8,6 +8,8 @@ import org.wordpress.android.fluxc.model.SiteModel
 import org.wordpress.android.ui.bloggingprompts.list.PromptSection.ALL
 import org.wordpress.android.ui.bloggingprompts.list.PromptSection.ANSWERED
 import org.wordpress.android.ui.bloggingprompts.list.PromptSection.NOT_ANSWERED
+import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
 
 @HiltViewModel
@@ -15,26 +17,30 @@ class BloggingPromptsListParentViewModel @Inject constructor(
     private val provider: BloggingPromptsListSiteProvider,
     private val analyticsTracker: BloggingPromptsListAnalyticsTracker,
 ) : ViewModel() {
-    fun start(site: SiteModel) {
-        provider.setSite(site)
-    }
+    private var hasStarted = AtomicBoolean(false)
+    private var lastSelectedTab = AtomicReference<PromptSection?>(null)
 
-    fun onOpen(currentTab: PromptSection) {
-        getSite()?.let {
-            analyticsTracker.trackScreenShown(it, currentTab)
-        }
+    fun start(site: SiteModel, currentTab: PromptSection) {
+        provider.setSite(site)
+        // Prevent redundant tracking during Config Changes
+        if (hasStarted.get()) return
+        else hasStarted.set(true)
+        getSite()?.let { analyticsTracker.trackScreenShown(it, currentTab) }
     }
 
     fun onSectionSelected(currentTab: PromptSection) {
-        getSite()?.let {
-            analyticsTracker.trackTabSelected(it, currentTab)
-        }
+        // Prevent redundant tracking during Config Changes
+        if (currentTab == lastSelectedTab.get()) return
+        else lastSelectedTab.set(currentTab)
+        getSite()?.let { analyticsTracker.trackTabSelected(it, currentTab) }
     }
 
     fun getSite(): SiteModel? = provider.getSite()
 }
 
 val promptsSections = listOf(ALL, ANSWERED, NOT_ANSWERED)
+
+internal const val POSITION_DEFAULT_TAB = 0
 
 enum class PromptSection(@StringRes val titleRes: Int) {
     ALL(R.string.blogging_prompts_tab_all),
