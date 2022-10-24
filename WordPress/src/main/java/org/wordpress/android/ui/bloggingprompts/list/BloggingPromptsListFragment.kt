@@ -8,7 +8,7 @@ import android.widget.LinearLayout
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,14 +21,17 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class BloggingPromptsListFragment : ViewPagerFragment() {
-
+    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
     @Inject lateinit var uiHelpers: UiHelpers
 
     private lateinit var binding: BloggingPromptsListFragmentBinding
     private lateinit var promptsListAdapter: BloggingPromptsListAdapter
 
     private val parentViewModel: BloggingPromptsListParentViewModel by activityViewModels()
-    private val viewModel: BloggingPromptsListViewModel by viewModels()
+    private val viewModel: BloggingPromptsListViewModel by lazy {
+        ViewModelProvider(this@BloggingPromptsListFragment, viewModelFactory)
+                .get(BloggingPromptsListViewModel::class.java)
+    }
 
     override fun getScrollableViewForUniqueIdProvision(): View = binding.promptsList
 

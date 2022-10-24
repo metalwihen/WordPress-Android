@@ -1,4 +1,4 @@
-package org.wordpress.android.ui.bloggingprompts
+package org.wordpress.android.ui.bloggingprompts.list
 
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
@@ -7,11 +7,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.wordpress.android.BaseUnitTest
 import org.wordpress.android.fluxc.model.SiteModel
-import org.wordpress.android.ui.bloggingprompts.list.BloggingPromptsListAnalyticsTracker
-import org.wordpress.android.ui.bloggingprompts.list.BloggingPromptsListParentViewModel
-import org.wordpress.android.ui.bloggingprompts.list.BloggingPromptsListSiteProvider
-import org.wordpress.android.ui.bloggingprompts.list.PromptSection
-import org.wordpress.android.ui.bloggingprompts.list.promptsSections
 
 class BloggingPromptsListParentViewModelTest : BaseUnitTest() {
     private val analyticsTracker: BloggingPromptsListAnalyticsTracker = mock()
@@ -25,17 +20,17 @@ class BloggingPromptsListParentViewModelTest : BaseUnitTest() {
 
     @Test
     fun `Should save siteModel when started`() {
-        viewModel.start(site)
+        viewModel.start(site, promptsSections[0])
 
         verify(provider).setSite(site)
     }
 
     @Test
-    fun `Should track screen accessed when page opened`() {
+    fun `Should track screen accessed when started`() {
         whenever(provider.getSite()).thenReturn(site)
 
-        val promptSection = promptsSections[0]
-        viewModel.onOpen(promptSection)
+        val promptSection = promptsSections[1]
+        viewModel.start(site, promptSection)
 
         verify(analyticsTracker).trackScreenShown(site, promptSection)
     }

@@ -7,6 +7,7 @@ import org.wordpress.android.ui.JetpackRemoteInstallViewModel;
 import org.wordpress.android.ui.accounts.LoginEpilogueViewModel;
 import org.wordpress.android.ui.accounts.LoginViewModel;
 import org.wordpress.android.ui.activitylog.list.filter.ActivityLogTypeFilterViewModel;
+import org.wordpress.android.ui.bloggingprompts.list.BloggingPromptsListViewModel;
 import org.wordpress.android.ui.bloggingprompts.onboarding.BloggingPromptsOnboardingViewModel;
 import org.wordpress.android.ui.bloggingreminders.BloggingRemindersViewModel;
 import org.wordpress.android.ui.comments.unified.UnifiedCommentActivityViewModel;
@@ -551,6 +552,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(BloggingPromptsOnboardingViewModel.class)
     abstract ViewModel bloggingPromptsOnboardingViewModel(BloggingPromptsOnboardingViewModel viewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(BloggingPromptsListViewModel.class)
+    abstract ViewModel bloggingPromptsListViewModel(BloggingPromptsListViewModel viewModel);
 
     @Binds
     @IntoMap

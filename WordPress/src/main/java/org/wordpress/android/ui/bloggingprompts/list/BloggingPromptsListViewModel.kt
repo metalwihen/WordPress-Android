@@ -4,59 +4,75 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
 import org.wordpress.android.R
 import org.wordpress.android.fluxc.model.SiteModel
-import org.wordpress.android.ui.bloggingprompts.list.PromptSection.ALL
-import org.wordpress.android.ui.bloggingprompts.list.PromptSection.ANSWERED
-import org.wordpress.android.ui.bloggingprompts.list.PromptSection.NOT_ANSWERED
-import org.wordpress.android.util.extensions.exhaustive
+import org.wordpress.android.modules.UI_THREAD
+import org.wordpress.android.util.NetworkUtilsWrapper
+import org.wordpress.android.viewmodel.ScopedViewModel
 import javax.inject.Inject
+import javax.inject.Named
 
-@HiltViewModel
-class BloggingPromptsListViewModel @Inject constructor() : ViewModel() {
+class BloggingPromptsListViewModel @Inject constructor(
+    @Named(UI_THREAD) private val mainDispatcher: CoroutineDispatcher,
+    private val fetchUsecase: BloggingPromptsListFetchStoredUsecase,
+    private val networkUtilsWrapper: NetworkUtilsWrapper,
+    private val mapper: BloggingPromptsListItemMapper
+) : ScopedViewModel(mainDispatcher) {
     private val _uiState = MutableLiveData<UiState>()
+
+    private lateinit var site: SiteModel
+    private lateinit var selected: PromptSection
+
     val uiState: LiveData<UiState> = _uiState
 
-    fun onOpen(site: SiteModel?, section: PromptSection?) {
-        if (site == null || section == null) {
+    fun onOpen(siteModel: SiteModel?, section: PromptSection?) {
+        if (siteModel == null || section == null) {
             _uiState.postValue(UiState(ContentViewState.Hidden, ErrorViewState.Error))
         } else {
-            // DUMMY LOGIC
-            when (section) {
-                ALL -> {
-                    _uiState.postValue(UiState(ContentViewState.Hidden, ErrorViewState.NoConnection))
-                }
-                NOT_ANSWERED -> {
-                    _uiState.postValue(UiState(ContentViewState.Hidden, ErrorViewState.Empty))
-                }
-                ANSWERED -> {
-                    _uiState.postValue(UiState(ContentViewState.Hidden, ErrorViewState.Loading))
-                }
-            }.exhaustive
+            this.site = siteModel
+            this.selected = section
+            load(siteModel, section)
         }
     }
 
     fun onClickButtonRetry() {
-        _uiState.postValue(
-                UiState(
-                        ContentViewState.Content(
-                                listOf(
-                                        generateDummyData(),
-                                        generateDummyData(),
-                                        generateDummyData(),
-                                        generateDummyData(),
-                                        generateDummyData(),
-                                        generateDummyData(),
-                                        generateDummyData(),
-                                        generateDummyData(),
-                                        generateDummyData()
-                                )
-                        ),
-                        ErrorViewState.Hidden
-                )
-        )
+        if (!::site.isInitialized || !::selected.isInitialized) {
+            _uiState.postValue(UiState(ContentViewState.Hidden, ErrorViewState.Error))
+        } else {
+            load(site, selected)
+        }
+    }
+
+    private fun load(site: SiteModel, selected: PromptSection) {
+        _uiState.postValue(UiState(ContentViewState.Hidden, ErrorViewState.Loading))
+
+        launch {
+            if (!networkUtilsWrapper.isNetworkAvailable()) {
+                _uiState.postValue(UiState(ContentViewState.Hidden, ErrorViewState.NoConnection))
+                return@launch
+            }
+
+            fetchUsecase.fetch(site, selected)
+                    .map { list -> list?.map { item -> mapper.toUiModel(item) } }
+                    .catch { emit(null) }
+                    .collect { list ->
+                        when {
+                            list == null -> {
+                                _uiState.postValue(UiState(ContentViewState.Hidden, ErrorViewState.Error))
+                            }
+                            list.isEmpty() -> {
+                                _uiState.postValue(UiState(ContentViewState.Hidden, ErrorViewState.Empty))
+                            }
+                            else -> {
+                                _uiState.postValue(UiState(ContentViewState.Content(list), ErrorViewState.Hidden))
+                            }
+                        }
+                    }
+        }
     }
 }
 
