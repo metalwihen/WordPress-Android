@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_answered_label"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:constraint_referenced_ids="prompt_subtitle_answered_separator, prompt_subtitle_answered_icon,prompt_subtitle_answered"
+        tools:visibility="visible" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="@dimen/margin_extra_large" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_bottom"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="@dimen/margin_extra_large" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_start"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/margin_extra_large" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_end"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/margin_extra_large" />
+
+    <org.wordpress.android.widgets.WPTextView
+        android:id="@+id/prompt_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:fontFamily="serif"
+        android:maxLines="2"
+        android:textAppearance="?attr/textAppearanceSubtitle1"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/guideline_start"
+        app:layout_constraintEnd_toStartOf="@id/guideline_end"
+        app:layout_constraintTop_toTopOf="@id/guideline_top"
+        tools:text="@tools:sample/lorem/random" />
+
+    <org.wordpress.android.widgets.WPTextView
+        android:id="@+id/prompt_subtitle_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_small"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textAppearance="?attr/textAppearanceBody2"
+        android:textColor="?attr/wpColorOnSurfaceMedium"
+        app:layout_constraintBottom_toBottomOf="@id/guideline_bottom"
+        app:layout_constraintStart_toStartOf="@+id/prompt_title"
+        app:layout_constraintTop_toBottomOf="@+id/prompt_title"
+        tools:text="Feb 16" />
+
+    <org.wordpress.android.widgets.WPTextView
+        android:id="@+id/prompt_subtitle_separator_answer_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_small"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="@string/blogging_prompts_list_item_separator"
+        android:textAppearance="?attr/textAppearanceBody2"
+        android:textColor="?attr/wpColorOnSurfaceMedium"
+        app:layout_constraintBottom_toBottomOf="@+id/prompt_subtitle_date"
+        app:layout_constraintStart_toEndOf="@+id/prompt_subtitle_date"
+        app:layout_constraintTop_toTopOf="@+id/prompt_subtitle_date" />
+
+    <org.wordpress.android.widgets.WPTextView
+        android:id="@+id/prompt_subtitle_answer_count"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:textAppearance="?attr/textAppearanceBody2"
+        android:textColor="?attr/wpColorOnSurfaceMedium"
+        android:layout_marginStart="@dimen/margin_small"
+        app:layout_constraintBottom_toBottomOf="@+id/prompt_subtitle_separator_answer_count"
+        app:layout_constraintStart_toEndOf="@+id/prompt_subtitle_separator_answer_count"
+        app:layout_constraintTop_toTopOf="@+id/prompt_subtitle_separator_answer_count"
+        tools:text="40 answers" />
+
+    <org.wordpress.android.widgets.WPTextView
+        android:id="@+id/prompt_subtitle_answered_separator"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/blogging_prompts_list_item_separator"
+        android:maxLines="1"
+        android:textAppearance="?attr/textAppearanceBody2"
+        android:textColor="?attr/wpColorOnSurfaceMedium"
+        android:layout_marginStart="@dimen/margin_small"
+        app:layout_constraintBottom_toBottomOf="@+id/prompt_subtitle_answer_count"
+        app:layout_constraintStart_toEndOf="@+id/prompt_subtitle_answer_count"
+        app:layout_constraintTop_toTopOf="@+id/prompt_subtitle_answer_count"
+        app:layout_goneMarginBottom="@dimen/margin_large" />
+
+    <ImageView
+        android:id="@+id/prompt_subtitle_answered_icon"
+        android:layout_width="16dp"
+        android:layout_height="0dp"
+        android:maxLines="1"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_checkmark"
+        android:tint="?attr/wpColorSuccess"
+        android:layout_marginStart="@dimen/margin_small"
+        app:layout_constraintBottom_toBottomOf="@+id/prompt_subtitle_answered_separator"
+        app:layout_constraintStart_toEndOf="@+id/prompt_subtitle_answered_separator"
+        app:layout_constraintTop_toTopOf="@+id/prompt_subtitle_answered_separator"
+        tools:ignore="ContentDescription" />
+
+    <org.wordpress.android.widgets.WPTextView
+        android:id="@+id/prompt_subtitle_answered"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_small"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="@string/blogging_prompts_list_item_answered"
+        tools:text="Answered"
+        android:textAppearance="?attr/textAppearanceBody2"
+        android:textColor="?attr/wpColorSuccess"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintBottom_toBottomOf="@+id/prompt_subtitle_answered_icon"
+        app:layout_constraintStart_toEndOf="@+id/prompt_subtitle_answered_icon"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_end"
+        app:layout_constraintTop_toTopOf="@+id/prompt_subtitle_answered_icon" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
