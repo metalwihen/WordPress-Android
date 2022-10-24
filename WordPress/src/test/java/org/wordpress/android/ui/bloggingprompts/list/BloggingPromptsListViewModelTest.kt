@@ -6,6 +6,7 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import org.junit.Assert.assertEquals
@@ -17,6 +18,7 @@ import org.wordpress.android.ui.bloggingprompts.list.TestDummyProvider.getPrompt
 import org.wordpress.android.ui.bloggingprompts.list.TestDummyProvider.getPromptModel
 import org.wordpress.android.util.NetworkUtilsWrapper
 
+@ExperimentalCoroutinesApi
 class BloggingPromptsListViewModelTest : BaseUnitTest() {
     private val site: SiteModel = mock()
     private val mainDispatcher = TestCoroutineDispatcher()

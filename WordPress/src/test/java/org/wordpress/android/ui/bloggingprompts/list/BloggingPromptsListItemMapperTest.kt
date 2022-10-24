@@ -10,7 +10,7 @@ import org.wordpress.android.ui.bloggingprompts.list.TestDummyProvider.getPrompt
 import org.wordpress.android.ui.bloggingprompts.list.TestDummyProvider.getPromptModel
 
 class BloggingPromptsListItemMapperTest : BaseUnitTest() {
-    private val dateFormatter: PromptDateFormatter = mock()
+    private val dateFormatter: BloggingPromptsListDateFormatter = mock()
 
     private val mapper = BloggingPromptsListItemMapper(dateFormatter)
 

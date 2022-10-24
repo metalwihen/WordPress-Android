@@ -7,7 +7,7 @@ import java.util.Date
 import java.util.Locale
 
 internal class PromptDateFormatterTest : BaseUnitTest() {
-    private val promptDateFormatter = PromptDateFormatter()
+    private val promptDateFormatter = BloggingPromptsListDateFormatter()
 
     @Test
     fun `Should format date provided`() {
