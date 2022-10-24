@@ -1,5 +1,7 @@
 package org.wordpress.android.ui.bloggingprompts.list
 
+import android.text.Html
+import android.text.Html.FROM_HTML_MODE_COMPACT
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -42,7 +44,7 @@ class BloggingPromptsListItemViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(prompt: BloggingPromptsListItem) {
         with(binding) {
-            promptTitle.text = prompt.title
+            promptTitle.text = Html.fromHtml(prompt.title, FROM_HTML_MODE_COMPACT)
             promptSubtitleAnswerCount.text = StringUtils.getQuantityString(
                     binding.root.context,
                     R.string.blogging_prompts_list_item_count_answers_zero,
