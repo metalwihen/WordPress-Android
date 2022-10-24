@@ -754,7 +754,7 @@
 
         <!-- Blogging Prompts -->
         <activity
-            android:name=".ui.bloggingprompts.BloggingPromptsListActivity"
+            android:name=".ui.bloggingprompts.list.BloggingPromptsListActivity"
             android:label="@string/blogging_prompts_title"
             android:theme="@style/WordPress.NoActionBar"/>
 

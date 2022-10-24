@@ -1,4 +1,4 @@
-package org.wordpress.android.ui.bloggingprompts
+package org.wordpress.android.ui.bloggingprompts.list
 
 import android.content.Context
 import android.content.Intent
@@ -14,7 +14,7 @@ import org.wordpress.android.fluxc.model.SiteModel
 @AndroidEntryPoint
 class BloggingPromptsListActivity : AppCompatActivity() {
     private lateinit var site: SiteModel
-    private val viewModel: BloggingPromptsListViewModel by viewModels()
+    private val viewModel: BloggingPromptsListParentViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +24,7 @@ class BloggingPromptsListActivity : AppCompatActivity() {
         site = checkNotNull((intent.getSerializableExtra(WordPress.SITE) as? SiteModel)) {
             "${WordPress.SITE} argument cannot be null, when launching ${BloggingPromptsListActivity::class.simpleName}"
         }
-        viewModel.start(site)
+        viewModel.start(site, promptsSections[POSITION_DEFAULT_TAB])
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -36,20 +36,11 @@ class BloggingPromptsListActivity : AppCompatActivity() {
     }
 
     companion object {
-        @JvmStatic
-        @JvmOverloads
         fun start(
             context: Context,
-            site: SiteModel,
-        ) = context.startActivity(buildIntent(context, site))
-
-        @JvmStatic
-        @JvmOverloads
-        fun buildIntent(
-            context: Context,
-            site: SiteModel,
-        ) = Intent(context, BloggingPromptsListActivity::class.java).apply {
-            putExtra(WordPress.SITE, site)
-        }
+            site: SiteModel
+        ) = context.startActivity(
+                Intent(context, BloggingPromptsListActivity::class.java)
+                        .apply { putExtra(WordPress.SITE, site) })
     }
 }
