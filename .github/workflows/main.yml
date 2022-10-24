@@ -1,0 +1,63 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+on:
+  pull_request:
+
+  workflow_dispatch:
+
+jobs:
+  checkstyle:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup
+        run: |
+          cp gradle.properties-example gradle.properties
+
+      - name: Run checkstyle
+        run: |
+          ./gradlew checkstyle
+          pwd
+
+      - name: Archive results
+        uses: actions/upload-artifact@v3
+        with:
+          name: code-report
+          path: /libs/editor/build/reports/*
+
+  detekt:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Run detekt
+        run: |
+          cp gradle.properties-example gradle.properties
+          ./gradlew detekt
+
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Run tests
+        run: |
+          cp gradle.properties-example gradle.properties
+          ./gradlew testJetpackJalapenoDebug
+
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Run lint
+        run: |
+          cp gradle.properties-example gradle.properties
+          ./gradlew lintJetpackJalapenoDebug
